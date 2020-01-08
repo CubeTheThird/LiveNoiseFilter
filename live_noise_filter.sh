@@ -1,5 +1,7 @@
 #!/bin/bash
 
+which sox > /dev/null 2>&1 || (echo "SoX not found. Please install Sound eXchange to proceed." && exit)
+
 time=5
 
 workDir=$(mktemp -d)
