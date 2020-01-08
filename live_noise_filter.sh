@@ -19,7 +19,16 @@ record()
 	paplay $noiseFile
 }
 
+quit()
+{	
+	cd -
+	rm -rf "$workdir"
+	sudo modprobe -r snd_aloop
+	exit
+}
+
 cd $workDir
+trap quit SIGINT
 
 #detect if aloop module is loaded
 #allow the user to load the module here
@@ -139,6 +148,3 @@ echo "Ctrl+C to terminate."
 
 #filter audio from $input to $output
 pacat -r -d $input --latency=1msec | sox -b $inputBits -e $inputEncoding -c $inputChannels -r $inputBitrate $inputEndian -t raw - -b $outputBits -e $outputEncoding -c $outputChannels -r $outputBitrate $outputEndian -t raw - noisered noise.prof 0.2 | pacat -p -d $output --latency=1msec
-
-cd -
-rm -rf "$workdir"
